@@ -45,7 +45,7 @@ public class Solitaire {
             tableauStacks[i] = new CardStack(false);
             tableauStacks[i].setXY(TABLEAU_POSITION.x + (i * (Card.CARD_WIDTH + 10)), TABLEAU_POSITION.y);
     
-            for (int j = 0; j <= i; j++) {
+            for (int j = i; j >= 0; j--) {
                 Card card = deck.pop();
                 if (j == i) {
                     card.setFaceup(); // Kartu paling atas terbuka
