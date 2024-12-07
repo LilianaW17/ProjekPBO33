@@ -701,7 +701,7 @@ public class Solitaire
 		showRulesButton.addActionListener(new ShowRulesListener());
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
-		gameTitle.setText("<b>ProjectPBO</b> <br> 2023 <br> Kelpompok 33");
+		gameTitle.setText("<b>Project PBO</b> <br> 2024 <br> Kelompok 33");
 		gameTitle.setEditable(false);
 		gameTitle.setOpaque(false);
 		gameTitle.setBounds(245, 20, 100, 100);
