@@ -5,10 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
 
-/*
- * Adapts the CardStack to be used as the final
- * (foundation) stack
- */
 class FinalStack extends CardStack
 {
 	public FinalStack()
@@ -31,9 +27,6 @@ class FinalStack extends CardStack
 		return (rect.contains(p));
 	}
 
-	/*
-	 * We draw this stack one card on top of the other
-	 */
 	@Override
 	protected void paintComponent(Graphics g)
 	{

@@ -101,10 +101,10 @@ class Card extends JPanel
 
         // Gunakan beberapa jalur kemungkinan
         String[] possiblePaths = {
-            baseDir + "/MySolitaire/deck/" + suitName + " " + valueName + ".jpg",
+            baseDir + "/ProjekPBO33/deck/" + suitName + " " + valueName + ".jpg",
             baseDir + "/deck/" + suitName + " " + valueName + ".jpg",
-            baseDir + "/assets/deck/" + suitName + " " + valueName + ".jpg",
-            "MySolitaire/deck/" + suitName + " " + valueName + ".jpg",
+            baseDir + "/deck/" + suitName + " " + valueName + ".jpg",
+            "ProjekPBO33/deck/" + suitName + " " + valueName + ".jpg",
             "deck/" + suitName + " " + valueName + ".jpg"
         };
 

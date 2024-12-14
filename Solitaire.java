@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
@@ -38,11 +39,12 @@ public class Solitaire
 	private static CardStack deck; // populated with standard 52 card deck
 
 	// GUI COMPONENTS (top level)
-	private static final JFrame frame = new JFrame("Klondike Solitaire");
+	private static final JFrame frame = new JFrame("Game Solitaire");
 	protected static final JPanel table = new JPanel();
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
-	private static JButton showRulesButton = new JButton("Show Rules");
+	private static JButton showRulesButton = new JButton("Leaderboard");
+	private static JButton leaderButton = new JButton("Leaderboard");
 	private static JButton newGameButton = new JButton("New Game");
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
 	private static JTextField scoreBox = new JTextField();// displays the score
@@ -148,31 +150,37 @@ public class Solitaire
 
 	}
 
-	private static class ShowRulesListener implements ActionListener
-	{
+	private static class ShowRulesListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			JDialog ruleFrame = new JDialog(frame, true);
-			ruleFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			ruleFrame.setSize(TABLE_HEIGHT, TABLE_WIDTH);
-			JScrollPane scroll;
-			JEditorPane rulesTextPane = new JEditorPane("text/html", "");
-			rulesTextPane.setEditable(false);
-			String rulesText = "<b>Klondike Solitaire Rules</b>"
-					+ "<br><br> Taking a shuffled standard 52-card deck of playing cards (without Jokers),";
-			rulesTextPane.setText(rulesText);
-			ruleFrame.add(scroll = new JScrollPane(rulesTextPane));
-
-			ruleFrame.setVisible(true);
+		public void actionPerformed(ActionEvent e) {
+			JDialog leaderboardFrame = new JDialog(frame, "Leaderboard", true);
+			leaderboardFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			leaderboardFrame.setSize(400, 300);
+	
+			// Ambil data leaderboard dari database
+			List<String> topScores = DatabaseConfig.getTopScores();
+	
+			// Format HTML untuk menampilkan leaderboard
+			StringBuilder leaderboardHtml = new StringBuilder();
+			leaderboardHtml.append("<html><body><h1>Leaderboard</h1><ol>");
+			for (String entry : topScores) {
+				leaderboardHtml.append("<li>").append(entry).append("</li>");
+			}
+			leaderboardHtml.append("</ol></body></html>");
+	
+			// Buat JEditorPane untuk menampilkan leaderboard
+			JEditorPane leaderboardTextPane = new JEditorPane("text/html", leaderboardHtml.toString());
+			leaderboardTextPane.setEditable(false);
+	
+			// Tambahkan leaderboard ke JScrollPane
+			JScrollPane scrollPane = new JScrollPane(leaderboardTextPane);
+			leaderboardFrame.add(scrollPane);
+	
+			// Tampilkan dialog
+			leaderboardFrame.setVisible(true);
 		}
 	}
-
-	/*
-	 * This class handles all of the logic of moving the Card components as well
-	 * as the game logic. This determines where Cards can be moved according to
-	 * the rules of Klondike solitiaire
-	 */
+	
 	private static class CardMovementManager extends MouseAdapter
 	{
 		private Card prevCard = null;// tracking card for waste stack
@@ -253,11 +261,6 @@ public class Solitaire
 			statusBox.setText("");
 			transferStack.makeEmpty();
 
-			/*
-			 * Here we use transferStack to temporarily hold all the cards above
-			 * the selected card in case player wants to move a stack rather
-			 * than a single card
-			 */
 			for (int x = 0; x < NUM_PLAY_DECKS; x++)
 			{
 				if (stopSearch)
@@ -745,11 +748,22 @@ public class Solitaire
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
 
+		Username usernameDialog = new Username();
+        String name = usernameDialog.getUserName();
+
+        // Memeriksa apakah nama valid
+        if (name != null && !name.trim().isEmpty()) {
+            // Jika nama valid, mulai game
+            System.out.println("Welcome, " + name + "!");
+            playNewGame();
+        } else {
+            // Jika nama kosong, tampilkan pesan kesalahan
+            System.out.println("Name cannot be empty. Game will not start.");
+        }
+
 		contentPane = frame.getContentPane();
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		playNewGame();
 
 		table.addMouseListener(new CardMovementManager());
 		table.addMouseMotionListener(new CardMovementManager());
